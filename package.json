@@ -1,0 +1,20 @@
+{
+  "name": "pdfLib",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pako": "^2.1.0",
+    "pdf-lib": "^1.17.1",
+    "pdfjs": "^2.5.2",
+    "pdfjs-dist": "^3.10.111",
+    "pngjs": "^7.0.0",
+    "rimraf": "^5.0.1"
+  }
+}
