@@ -8,14 +8,15 @@ async function extractImagesFromPDF(pdfPath) {
 
     for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
         const page = await pdf.getPage(pageNumber);
-        const operatorList = await page.getOperatorList();
-        // { fnArray: [], argsArray: [[],[]...] }
-        console.log('pdfjsLib.OPS.paintImageXObject:', pdfjsLib.OPS.paintImageXObject);
+        const operatorList = await page.getOperatorList(); // 获取这个页面的操作列表（数组列表，对应下面的一些 OPS 操作常量）
+        // { fnArray: number[], argsArray: number[][] }
+        console.log('operatorList:zzz', operatorList);
         
         const imageData = [];
         for (let i = 0; i < operatorList.fnArray.length; i++) {
+             // 匹配操作时，进入此判断
             if (operatorList.fnArray[i] === pdfjsLib.OPS.paintImageXObject) {
-                console.log('imageData:zzz', imageData);
+                console.log('index', i);
                 
                 imageData.push({
                     operatorIndex: i,
@@ -24,13 +25,28 @@ async function extractImagesFromPDF(pdfPath) {
             }
         }
 
-        for (const data of imageData) {
-            const imgData = await page.commonObjs.get(data.objId).getData();
-            const operatorIndex = data.operatorIndex;
-            const transform = operatorList.argsArray[operatorIndex][1];
-            const width = operatorList.argsArray[operatorIndex][2];
-            const height = operatorList.argsArray[operatorIndex][3];
+        console.log('imageData:zzz', imageData);
+        
 
+        for (const data of imageData) {
+            console.log('data:zzz', data);
+            
+            // page.commonObjs 是一个 Map 对象，存储了 PDF 中的所有对象，包括图片、字体等
+            // page.commonObjs.get(data.objId) 获取到图片对象
+            // page.commonObjs.get(data.objId).getData() 获取到图片的二进制数据
+            const imgData = await page.commonObjs.get(data.objId);
+            console.log('imgData:111', imgData);
+            
+            const operatorIndex = data.operatorIndex; // 操作索引 6
+            console.log('operatorIndex:zzz', operatorIndex);
+            
+            const transform = operatorList.argsArray[operatorIndex][1]; // 变换矩阵
+            console.log('transform:zzz', transform);
+            
+            const width = operatorList.argsArray[operatorIndex][2]; // 宽度
+            const height = operatorList.argsArray[operatorIndex][3]; // 高度
+            console.log('width:zzz, height:zzz', width, height);
+            
             images.push({
                 pageNumber,
                 x: transform[4],
