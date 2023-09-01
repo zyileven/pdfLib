@@ -1,0 +1,38 @@
+<script> 
+const { PDFDocument, rgb } = PDFLib 
+async function drawSvgPaths() { 
+    //path for circle 
+    const svgPath = 'M61.44,0A61.44,61.44,0,1,1,0,61.44,61.44,61.44,0,0,1,61.44,0Z'; 
+    //path for confirm sign 
+    const svgPath2 = 'M42.37,51.68,53.26,62,79,35.87c2.13-2.16,3.47-3.9,6.1-1.19l8.53,8.74c2.8,2.77,2.66,4.4,0,7L58.14,85.34c-5.58,5.46-4.61,5.79-10.26.19L28,65.77c-1.18-1.28-1.05-2.57.24-3.84l9.9-10.27c1.5-1.58,2.7-1.44,4.22,0Z'; 
+    // Create a new PDFDocument 
+    const pdfDoc = await PDFDocument.create() 
+    // Add a blank page to the document 
+    const page = pdfDoc.addPage() 
+    page.moveTo(100, page.getHeight() - 5) 
+    // Draw the SVG path as a black line 
+    page.moveDown(25) 
+    page.drawSvgPath(svgPath) 
+    page.drawSvgPath(svgPath2) 
+    // Draw the SVG path as a thick green line 
+    page.moveDown(200) 
+    page.drawSvgPath(svgPath, { 
+        borderColor: rgb(0, 1, 0), borderWidth: 5 
+    }) 
+    page.drawSvgPath(svgPath2, { 
+        borderColor: rgb(0, 1, 0), borderWidth: 5 
+    }) 
+    // Draw the SVG path and fill it with red 
+    page.moveDown(200) 
+    page.drawSvgPath(svgPath, { color: rgb(1, 0, 0) }) 
+    page.drawSvgPath(svgPath2, { color: rgb(1, 1, 1) }) 
+    // Draw the SVG path at 50% of its original size 
+    page.moveDown(200) 
+    page.drawSvgPath(svgPath, { scale: 0.5 }) 
+    page.drawSvgPath(svgPath2, { scale: 0.5 }) 
+    // Serialize the PDFDocument to bytes (a Uint8Array) 
+    const pdfBytes = await pdfDoc.save() 
+    // Trigger the browser to download the PDF document 
+    download(pdfBytes, "ex2.pdf", "application/pdf"); 
+    } 
+</script>
